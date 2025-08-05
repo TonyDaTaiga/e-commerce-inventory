@@ -20,4 +20,16 @@ class Product(BaseModel):
         self.quantity = new_quantity
         db.session.commit()
 
+    @classmethod
+    def search(cls, query):
+        """Search products by name or description"""
+        return cls.query.filter(
+            db.or_(
+                cls.name.ilike(f'%{query}%'),
+                cls.description.ilike(f'%{query}%')
+            )
+        ).all()
+    
+    def __repr__(self):
+        return f'<Product {self.name}>'
     
